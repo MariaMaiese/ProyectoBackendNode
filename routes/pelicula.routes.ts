@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { Pelicula } from "../models/pelicula.model";
+import { Peliculas } from "../models/pelicula.model";
 
 const peliculasRoute = Router();
 
@@ -11,7 +11,7 @@ peliculasRoute.post('/', (req: Request, res: Response) => {
         year: req.body.year
     }
 
-    Pelicula.create(pelicula)
+    Peliculas.create(pelicula)
         .then(peliculaDb => {
             res.json({
                 ok: true,

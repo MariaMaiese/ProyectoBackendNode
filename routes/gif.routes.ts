@@ -5,7 +5,7 @@ const gifsRoute = Router();
 
 gifsRoute.get('/', async (req: Request, res: Response) => {
 
-    const gifs = await Gif.find().exec();
+    const gifs = await Gif.find().populate('generos').exec();
     res.json({
         ok: true,
         gifs
@@ -15,8 +15,13 @@ gifsRoute.get('/', async (req: Request, res: Response) => {
 gifsRoute.post('/', (req: Request, res: Response) => {
     const gif = {
         name: req.body.name,
-        imagen: req.body.imagen
+        imagen: req.body.imagen,
+        generos: req.body.generos
     }
+
+    const arrGeneros = gif.generos.split(",");
+
+    gif.generos = arrGeneros;
 
     Gif.create(gif)
         .then(gifDb => {
@@ -30,6 +35,8 @@ gifsRoute.post('/', (req: Request, res: Response) => {
                 err
             })
         })
+
+
 })
 
 export default gifsRoute;

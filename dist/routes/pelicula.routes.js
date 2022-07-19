@@ -9,7 +9,7 @@ peliculasRoute.post('/', (req, res) => {
         poster: req.body.poster,
         year: req.body.year
     };
-    pelicula_model_1.Pelicula.create(pelicula)
+    pelicula_model_1.Peliculas.create(pelicula)
         .then(peliculaDb => {
         res.json({
             ok: true,

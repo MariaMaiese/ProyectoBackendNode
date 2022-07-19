@@ -8,7 +8,11 @@ const gifSchema = new Schema({
     imagen: {
         type: String,
         required: [true, 'La imagen es requerida']
-    }
+    },
+    generos: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Generos'
+    }]
 });
 
 interface Igif extends Document {
@@ -16,4 +20,4 @@ interface Igif extends Document {
     imagen: string
 }
 
-export const Gif = model<Igif>('Gifs', gifSchema)
+export const Gif = model<Igif>('Gif', gifSchema)

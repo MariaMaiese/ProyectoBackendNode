@@ -10,6 +10,10 @@ const gifSchema = new mongoose_1.Schema({
     imagen: {
         type: String,
         required: [true, 'La imagen es requerida']
-    }
+    },
+    generos: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Generos'
+        }]
 });
-exports.Gif = (0, mongoose_1.model)('Gifs', gifSchema);
+exports.Gif = (0, mongoose_1.model)('Gif', gifSchema);

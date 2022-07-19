@@ -9,7 +9,7 @@ const userRoutes = Router();
 userRoutes.post('/', (req: Request, res: Response) => { //lo que recibimos es el req y la respuesta es res
 
     const user = {
-        nombre: req.body.nombre,
+        name: req.body.name,
         email: req.body.email,
         password: req.body.password
 
@@ -18,11 +18,12 @@ userRoutes.post('/', (req: Request, res: Response) => { //lo que recibimos es el
 
     User.create(user)
         //promesa
-        .then(userDb => {
+        .then((userDb: any) => {
             const token = Token.getJwtToken({
                 _id: userDb._id,
-                nombre: userDb.nombre,
-                email: userDb.email
+                name: userDb.name,
+                email: userDb.email,
+                role: userDb.roles.length > 0 ? userDb.roles[0].name : 'Usuario'
             })
             res.json({
                 ok: true,
@@ -55,8 +56,9 @@ userRoutes.post('/login', (req: Request, res: Response) => {
                 if (userDb.checkPassword(body.password)) {
                     const token = Token.getJwtToken({
                         _id: userDb._id,
-                        nombre: userDb.nombre,
-                        email: userDb.email
+                        name: userDb.name,
+                        email: userDb.email,
+                        role: userDb.roles.length > 0 ? userDb.roles[0].name : 'Usuario'  //clausula bicondicional
                     })
                     res.json({
                         ok: true,
@@ -72,12 +74,12 @@ userRoutes.post('/login', (req: Request, res: Response) => {
         }
 
 
-    })
+    }).populate('roles')
 });
 //esta ruta esta protegida con el middleware de autenticacion
 userRoutes.put('/update', [Authentication], (req: any, res: Response) => {
     const user = {
-        nombre: req.body.nombre || req.user.nombre,
+        name: req.body.name || req.user.name,
         email: req.body.email || req.user.email
     }
     //new true para que lo actualice todo, trae el id del token por medio del req
@@ -91,7 +93,7 @@ userRoutes.put('/update', [Authentication], (req: any, res: Response) => {
         }
         const token = Token.getJwtToken({
             _id: userDb._id,
-            nombre: userDb.nombre,
+            name: userDb.name,
             email: userDb.email
         })
         res.json({
@@ -103,6 +105,17 @@ userRoutes.put('/update', [Authentication], (req: any, res: Response) => {
 
 
 });
+
+userRoutes.get('/checkadmin', [Authentication], async (req: Request, res: Response) => {
+    const token = req.get('x-token') || '';
+    var resp = await Token.validateAdmin(token);
+
+    res.json({
+        ok: true,
+        respuesta: resp
+    })
+
+})
 
 
 export default userRoutes;

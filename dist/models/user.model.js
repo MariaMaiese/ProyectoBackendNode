@@ -5,7 +5,7 @@ const mongoose_1 = require("mongoose");
 //colecciones = tablas pero en bd no relacional
 //esta es la estructura de nuestra coleccion en mongoose
 const userSchema = new mongoose_1.Schema({
-    nombre: {
+    name: {
         type: String,
         required: [true, 'El nombre es requerido']
     },
@@ -17,7 +17,11 @@ const userSchema = new mongoose_1.Schema({
     password: {
         type: String,
         required: [true, 'El password es requerido']
-    }
+    },
+    roles: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Role'
+        }]
 });
 userSchema.method('checkPassword', function (password = '') {
     // if (bcrypt.compareSync(password, this.password)) {
@@ -32,4 +36,4 @@ userSchema.method('checkPassword', function (password = '') {
         return false;
     }
 });
-exports.User = (0, mongoose_1.model)('Users', userSchema);
+exports.User = (0, mongoose_1.model)('User', userSchema);

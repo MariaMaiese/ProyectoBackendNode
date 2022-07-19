@@ -21,4 +21,4 @@ interface Ipelicula extends Document {
     year: number
 }
 
-export const Pelicula = model<Ipelicula>('Peliculas', peliculaSchema)
+export const Peliculas = model<Ipelicula>('Peliculas', peliculaSchema)

@@ -13,7 +13,7 @@ const express_1 = require("express");
 const gif_model_1 = require("../models/gif.model");
 const gifsRoute = (0, express_1.Router)();
 gifsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const gifs = yield gif_model_1.Gif.find().exec();
+    const gifs = yield gif_model_1.Gif.find().populate('generos').exec();
     res.json({
         ok: true,
         gifs
@@ -22,8 +22,11 @@ gifsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 gifsRoute.post('/', (req, res) => {
     const gif = {
         name: req.body.name,
-        imagen: req.body.imagen
+        imagen: req.body.imagen,
+        generos: req.body.generos
     };
+    const arrGeneros = gif.generos.split(",");
+    gif.generos = arrGeneros;
     gif_model_1.Gif.create(gif)
         .then(gifDb => {
         res.json({
